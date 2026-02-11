@@ -1,0 +1,3510 @@
+.TH GYSCAN "1" "2026年2月8日" "GYscan v2.8.2" "用户命令手册"
+.SH 名称
+GYscan \- Go语言综合渗透测试工具
+.SH 总览
+.B GYscan
+[\fI帮助选项\fR] [\fI命令\fR] [\fI命令参数\fR]
+.PP
+.B GYscan
+\fBabout\fR
+.PP
+.B GYscan
+\fBca\fR \fI目标\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBcrunch\fR \fI最小长度\fR \fI最大长度\fR \fI字符集\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBcupp\fR [\fI目标名字\fR] [\fI选项\fR]
+.PP
+.B GYscan
+\fBdatabase\fR \fI目标地址\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBdirscan\fR \fB-u\fR \fIURL\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBdcom\fR \fI子命令\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBftp\fR \fI目标\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBfu\fR \fB-u\fR \fIURL\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBlinenum\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBlinux-kernel\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBpowershell\fR \fI子命令\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBprocess\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBrdp\fR \fI子命令\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBroute\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBscan\fR \fB--target\fR \fI目标\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBscapy\fR \fI子命令\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBsmb\fR \fI子命令\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBssh\fR \fB--target\fR \fI目标\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBsub\fR \fI目标域名\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBuserinfo\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBwebshell\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBwmi\fR \fI子命令\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBwinlog\fR \fI子命令\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBxss\fR \fB--target\fR \fIURL\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBwaf\fR \fB-u\fR \fIURL\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBwhois\fR \fI域名\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBwwifi\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBexp\fR \fI子命令\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBwebfp\fR \fB-u\fR \fIURL\fR [\fI选项\fR]
+.PP
+.B GYscan
+\fBws\fR \fB-u\fR \fIURL\fR [\fI选项\fR]
+.SH 描述
+GYscan是一款专业的综合渗透测试工具，基于Go语言开发，集成了信息收集、漏洞检测、密码破解、Web安全、远程执行等丰富的测试功能模块，为安全研究人员和渗透测试人员提供高效、可靠的安全评估解决方案。
+.PP
+\fB核心功能模块\fR：
+.PP
+\fB资产探测\fR：存活主机识别、端口扫描，服务指纹识别、子域名枚举
+.PP
+\fBWeb指纹识别\fR：基于HTTP响应头、HTML内容识别网站技术栈
+.PP
+\fB配置审计\fR：基于CIS基线的本地系统配置安全检查，支持Windows、Linux、Web、SSH、中间件五大类审计
+.PP
+\fB凭证处理\fR：本地凭据抓取、批量凭据验证
+.PP
+\fB横向执行\fR：远程命令执行、文件传输、漏洞利用
+.PP
+\fB权限提升\fR：提权漏洞扫描与利用
+.PP
+\fB痕迹清理\fR：日志清理、文件删除
+.PP
+\fB技术特点\fR：
+.PP
+跨平台支持：支持Windows、Linux、macOS三大主流操作系统
+.PP
+模块化架构：采用插件化设计，易于功能扩展和自定义模块开发
+.PP
+高性能并发：基于Go原生并发模型，支持多线程并发处理
+.PP
+丰富输出：支持控制台输出、文件输出多种格式（JSON、HTML、Text）
+.PP
+配置证据：审计检查可显示具体配置文件路径、配置项名称、当前值和修复建议
+.SH 全局选项
+.PP
+\fB--key\fR \fI字符串\fR
+.RS 4
+流量加密密钥，使用AES-256算法加密网络流量
+.RE
+.PP
+\fB--proxy\fR \fI字符串\fR
+.RS 4
+代理服务器地址，支持HTTP和SOCKS5协议
+.RE
+.PP
+\fB-q\fR, \fB--silent\fR
+.RS 4
+静默模式，仅输出关键结果，减少冗余信息
+.RE
+.PP
+\fB-V\fR, \fB--version\fR
+.RS 4
+显示版本信息后退出
+.RE
+.PP
+\fB-h\fR, \fB--help\fR
+.RS 4
+显示帮助信息
+.RE
+.SH 命令详解
+.SS about
+.PP
+\fBGYscan about\fR
+.PP
+查看工具的详细信息，包括功能介绍、技术特点、适用场景等。
+.PP
+\fB描述\fR：显示GYscan工具的综合信息，包括核心功能模块、技术特点、适用场景以及常规横向测试步骤。
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan about
+.RE
+.SS ca（配置审计工具）
+.PP
+\fBGYscan ca\fR \fI目标\fR [\fI选项\fR]
+.PP
+配置审计（Configuration Audit）工具，基于CIS Benchmark安全基线对目标系统进行配置合规性检查。支持本地系统审计，包括Windows、Linux、Web、SSH、中间件五大类检查。
+.PP
+\fB审计方式\fR：
+.PP
+\fB本地审计\fR
+.RS 4
+直接审计本机系统配置（需要相应权限）
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan ca localhost
+.RE
+.RS 4
+审计本地系统配置（自动识别本机系统类型）
+.RE
+.PP
+.RS 4
+.B GYscan ca localhost --category all
+.RE
+.RS 4
+全面审计本地系统
+.RE
+.PP
+.RS 4
+.B GYscan ca localhost --category os
+.RE
+.RS 4
+只执行操作系统配置审计
+.RE
+.PP
+.RS 4
+.B GYscan ca localhost --category web --format html -o web_audit.html
+.RE
+.RS 4
+执行Web配置审计并输出HTML格式报告
+.RE
+.PP
+\fB审计选项\fR：
+.PP
+\fB--category\fR \fI类别\fR
+.RS 4
+审计类别：os、web、ssh、middleware（可选，默认全部）
+.RE
+.PP
+\fB--format\fR \fI格式\fR
+.RS 4
+输出格式：text（文本，默认）、json、html
+.RE
+.PP
+\fB-o\fR, \fB--output\fR \fI文件路径\fR
+.RS 4
+结果输出到文件
+.RE
+.PP
+\fB--verbose\fR
+.RS 4
+详细输出模式
+.RE
+.PP
+\fB--timeout\fR \fI秒数\fR
+.RS 4
+超时时间，默认300秒
+.RE
+.PP
+\fB--parallel\fR \fI线程数\fR
+.RS 4
+并行审计数量，默认4
+.RE
+.PP
+\fB--skip-priv-check\fR
+.RS 4
+跳过权限检查（谨慎使用）
+.RE
+.PP
+\fB--baseline\fR \fI基线名称\fR
+.RS 4
+安全基线配置：enterprise（企业级）、high_security（高安全）、pci_dss、hipaa
+.RE
+.PP
+\fB审计类别说明\fR：
+.PP
+\fBWindows配置审计\fR
+.RS 4
+Windows系统安全配置检查，包括账户策略、服务配置、注册表设置、审计策略、LSA安全、UAC、防火墙、SMB设置、匿名访问等10项检查
+.RE
+.PP
+\fBLinux配置审计\fR
+.RS 4
+Linux系统安全配置检查，包括账户管理、密码策略、服务管理、内核参数、文件权限、SSH配置、审计配置、防火墙配置、日志配置、更新管理10项检查
+.RE
+.PP
+\fBWeb配置审计\fR
+.RS 4
+Web服务器安全配置检查，包括HTTP安全头、CORS配置、SSL/TLS配置、会话安全、XSS防护、CSRF防护、信息泄露防护、目录遍历、HTTP方法限制、点击劫持、Referrer策略、文件权限等13项检查
+.RE
+.PP
+\fBSSH配置审计\fR
+.RS 4
+SSH服务安全配置检查，包括协议版本、认证方式、root登录权限、权限验证、空闲超时、X11转发、端口转发、主机密钥、加密算法、MAC算法、密钥交换、登录横幅、最大认证次数、最大会话数、日志级别等15项检查（注：Windows系统会自动跳过SSH审计）
+.RE
+.PP
+\fB中间件配置审计\fR
+.RS 4
+中间件服务安全配置检查，包括数据库账户权限、网络访问控制、加密配置、审计日志、密码策略、应用服务器管理、安全配置、缓存服务器、消息队列、日志配置等10项检查
+.RE
+.SS crunch（密码字典生成工具）
+.PP
+\fBGYscan crunch\fR \fI最小长度\fR \fI最大长度\fR \fI字符集\fR [\fI选项\fR]
+.PP
+生成指定长度范围的密码字典，模仿Linux下crunch工具的功能。支持多线程并发生成，适用于安全测试中的密码爆破场景。
+.PP
+\fB参数说明\fR：
+.PP
+\fI最小长度\fR
+.RS 4
+生成密码的最小长度，必须大于0的整数
+.RE
+.PP
+\fI最大长度\fR
+.RS 4
+生成密码的最大长度，必须大于等于最小长度
+.RE
+.PP
+\fI字符集\fR
+.RS 4
+包含的字符集，可以是字母、数字、符号的任意组合
+.RE
+.PP
+\fB选项\fR：
+.PP
+\fB-o\fR, \fB--output\fR \fI文件路径\fR
+.RS 4
+输出文件路径，生成结果保存到指定文件（必需参数）
+.RE
+.PP
+\fB-t\fR, \fB--threads\fR \fI线程数\fR
+.RS 4
+使用的线程数量，范围1-100，默认4线程
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan crunch 4 6 abcdefg -o passwords.txt
+.RE
+.RS 4
+生成最小4位、最大6位，仅使用abcdefg字符集的密码字典
+.RE
+.PP
+.RS 4
+.B GYscan crunch 8 8 0123456789 -o numbers.txt
+.RE
+.RS 4
+生成8位纯数字密码字典
+.RE
+.PP
+.RS 4
+.B GYscan crunch 6 10 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%" -o complex.txt -t 8
+.RE
+.RS 4
+生成6-10位复杂字符密码字典，使用8线程
+.RE
+.SS cupp（通用用户密码分析器）
+.PP
+\fBGYscan cupp\fR [\fI目标名字\fR] [\fI选项\fR]
+.PP
+CUPP (Common User Passwords Profiler) - 通用用户密码分析器，根据目标用户信息生成定制化的密码字典。适用于密码安全测试和社会工程学场景。
+.PP
+\fB命令模式\fR：
+.PP
+\fB快速生成\fR
+.RS 4
+直接基于名字生成密码变体
+.RE
+.PP
+\fB交互式模式\fR
+.RS 4
+通过命令行交互输入目标详细信息
+.RE
+.PP
+\fB改进字典\fR
+.RS 4
+对现有字典文件进行增强和扩展
+.RE
+.PP
+\fB选项\fR：
+.PP
+\fB-i\fR, \fB--interactive\fR
+.RS 4
+启用交互式模式，引导用户输入目标详细信息
+.RE
+.PP
+\fB-w\fR, \fB--improve\fR \fI文件路径\fR
+.RS 4
+改进现有字典文件，添加变体和组合
+.RE
+.PP
+\fB-c\fR, \fB--concat\fR
+.RS 4
+改进字典时连接词汇（仅与-w配合使用）
+.RE
+.PP
+\fB-l\fR, \fB--leet\fR
+.RS 4
+启用Leet模式，将字母替换为数字符号（如e→3, a→4, o→0）
+.RE
+.PP
+\fB-n\fR, \fB--numbers\fR
+.RS 4
+在密码末尾添加随机数字
+.RE
+.PP
+\fB-s\fR, \fB--special\fR
+.RS 4
+在密码末尾添加特殊字符
+.RE
+.PP
+\fB-o\fR, \fB--output\fR \fI文件路径\fR
+.RS 4
+指定输出文件路径
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan cupp john
+.RE
+.RS 4
+基于名字"john"生成密码字典
+.RE
+.PP
+.RS 4
+.B GYscan cupp john --leet -n -s
+.RE
+.RS 4
+生成密码并启用Leet模式、数字和特殊字符
+.RE
+.PP
+.RS 4
+.B GYscan cupp -i
+.RE
+.RS 4
+启动交互式输入模式
+.RE
+.PP
+.RS 4
+.B GYscan cupp -w wordlist.txt --concat --leet
+.RE
+.RS 4
+改进现有字典，连接词汇并应用Leet模式
+.RE
+.SS database（数据库密码破解工具）
+.PP
+\fBGYscan database\fR \fI目标地址\fR [\fI选项\fR]
+.PP
+数据库密码破解工具，支持MySQL、PostgreSQL、MSSQL、Oracle、MariaDB等多种数据库的弱口令检测。采用多线程并发爆破，支持用户名和密码字典攻击。
+.PP
+\fB目标地址格式\fR：
+.PP
+\fBmysql://主机:端口\fR
+.RS 4
+MySQL数据库
+.RE
+.PP
+\fBpostgres://主机:端口\fR
+.RS 4
+PostgreSQL数据库
+.RE
+.PP
+\fBmssql://主机:端口\fR
+.RS 4
+Microsoft SQL Server数据库
+.RE
+.PP
+\fBoracle://主机:端口\fR
+.RS 4
+Oracle数据库
+.RE
+.PP
+\fBmariadb://主机:端口\fR
+.RS 4
+MariaDB数据库
+.RE
+.PP
+\fB选项\fR：
+.PP
+\fB-t\fR, \fB--target\fR \fI字符串\fR
+.RS 4
+目标数据库地址（支持URL格式）
+.RE
+.PP
+\fB-L\fR, \fB--target-file\fR \fI文件路径\fR
+.RS 4
+包含多个目标的文件，每行一个目标
+.RE
+.PP
+\fB-u\fR, \fB--username\fR \fI字符串或文件\fR
+.RS 4
+用户名或用户名字典文件
+.RE
+.PP
+\fB-p\fR, \fB--password\fR \fI字符串或文件\fR
+.RS 4
+密码或密码字典文件
+.RE
+.PP
+\fB-d\fR, \fB--database\fR \fI数据库名\fR
+.RS 4
+指定数据库名称（可选）
+.RE
+.PP
+\fB-T\fR, \fB--threads\fR \fI线程数\fR
+.RS 4
+并发线程数，默认5
+.RE
+.PP
+\fB--timeout\fR \fI秒数\fR
+.RS 4
+连接超时时间，默认10秒
+.RE
+.PP
+\fB--ssl\fR
+.RS 4
+启用SSL加密连接
+.RE
+.PP
+\fB--protocol\fR
+.RS 4
+使用协议级破解（高级功能）
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan database mysql://192.168.1.100:3306 -u user.txt -p pass.txt
+.RE
+.RS 4
+破解MySQL数据库，使用用户名字典和密码字典
+.RE
+.PP
+.RS 4
+.B GYscan database postgres://192.168.1.101:5432 -u admin -p top100.txt
+.RE
+.RS 4
+破解PostgreSQL数据库
+.RE
+.PP
+.RS 4
+.B GYscan database mssql://192.168.1.102:1433 -u user.txt -p pass.txt -T 10
+.RE
+.RS 4
+破解MSSQL数据库，使用10线程
+.RE
+.PP
+.RS 4
+.B GYscan database oracle://192.168.1.103:1521 -u scott -p tiger -d orcl
+.RE
+.RS 4
+破解Oracle数据库，指定SID为orcl
+.RE
+.SS dcom（DCOM远程执行模块）
+.PP
+\fBGYscan dcom\fR \fI子命令\fR [\fI选项\fR]
+.PP
+DCOM（Distributed Component Object Model）远程执行模块，支持通过DCOM协议执行远程命令。
+.PP
+\fB子命令\fR：
+.PP
+\fBinfo\fR
+.RS 4
+获取DCOM应用信息
+.RE
+.PP
+\fBexec\fR
+.RS 4
+执行远程命令
+.RE
+.PP
+\fB选项\fR：
+.PP
+\fB--target\fR \fI主机地址\fR
+.RS 4
+目标主机IP或域名（必需参数）
+.RE
+.PP
+\fB--port\fR \fI端口号\fR
+.RS 4
+RPC端口，默认135
+.RE
+.PP
+\fB--user\fR \fI用户名\fR
+.RS 4
+用户名
+.RE
+.PP
+\fB--password\fR \fI密码\fR
+.RS 4
+密码
+.RE
+.PP
+\fB--domain\fR \fI域名\fR
+.RS 4
+域名，用于域环境认证
+.RE
+.PP
+\fB-c\fR, \fB--command\fR \fI命令\fR
+.RS 4
+要执行的命令（exec子命令必需参数）
+.RE
+.PP
+\fB--object\fR \fI对象\fR
+.RS 4
+DCOM对象名称，默认MMC20.Application
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan dcom info --target 192.168.1.100
+.RE
+.RS 4
+获取目标DCOM应用信息
+.RE
+.PP
+.RS 4
+.B GYscan dcom exec --target 192.168.1.100 --user admin --password password --command "whoami"
+.RE
+.RS 4
+执行远程命令
+.RE
+.SS dirscan（网站目录扫描工具）
+.PP
+\fBGYscan dirscan\fR \fB-u\fR \fIURL\fR [\fI选项\fR]
+.PP
+网站目录扫描工具，基于dirsearch功能开发，支持多线程扫描、自定义字典、扩展名扫描、状态码过滤等功能。
+.PP
+\fB选项\fR：
+.PP
+\fB-u\fR, \fB--url\fR \fIURL\fR
+.RS 4
+目标URL地址（必需参数）
+.RE
+.PP
+\fB-w\fR, \fB--wordlist\fR \fI文件路径\fR
+.RS 4
+字典文件路径，默认使用内置字典
+.RE
+.PP
+\fB-t\fR, \fB--threads\fR \fI线程数\fR
+.RS 4
+并发线程数，默认20
+.RE
+.PP
+\fB--timeout\fR \fI秒数\fR
+.RS 4
+请求超时时间，默认10秒
+.RE
+.PP
+\fB-e\fR, \fB--extensions\fR \fI扩展名列表\fR
+.RS 4
+扫描文件扩展名，逗号分隔，如：php,html,txt
+.RE
+.PP
+\fB-o\fR, \fB--output\fR \fI文件路径\fR
+.RS 4
+结果输出文件路径
+.RE
+.PP
+\fB--user-agent\fR \fI字符串\fR
+.RS 4
+自定义User-Agent请求头
+.RE
+.PP
+\fB--proxy\fR \fI代理地址\fR
+.RS 4
+代理服务器地址，支持HTTP/SOCKS
+.RE
+.PP
+\fB--show-all\fR
+.RS 4
+显示所有响应，包括错误页面
+.RE
+.PP
+\fB--status-codes\fR \fI状态码列表\fR
+.RS 4
+过滤显示的状态码，逗号分隔，如：200,301,403
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan dirscan -u http://example.com
+.RE
+.RS 4
+使用默认字典进行基本扫描
+.RE
+.PP
+.RS 4
+.B GYscan dirscan -u https://example.com -w wordlist.txt
+.RE
+.RS 4
+使用自定义字典文件扫描
+.RE
+.PP
+.RS 4
+.B GYscan dirscan -u http://example.com -t 50 -e php,html,asp
+.RE
+.RS 4
+使用50线程，扫描PHP、HTML、ASP文件
+.RE
+.PP
+.RS 4
+.B GYscan dirscan -u http://example.com --proxy http://127.0.0.1:8080
+.RE
+.RS 4
+通过代理服务器扫描
+.RE
+.PP
+.RS 4
+.B GYscan dirscan -u http://example.com -o results.txt
+.RE
+.RS 4
+保存扫描结果到文件
+.RE
+.SS ftp（FTP密码破解工具）
+.PP
+\fBGYscan ftp\fR \fI目标\fR [\fI选项\fR]
+.PP
+FTP密码破解工具，支持字典攻击和指定用户名密码组合爆破。支持多线程并发破解，实时显示破解进度和结果。
+.PP
+\fB目标格式\fR：
+.PP
+直接IP：\fI192.168.1.1\fR
+.PP
+IP+端口：\fI192.168.1.1:2121\fR
+.PP
+FTP URL：\fIftp://192.168.1.1:21\fR
+.PP
+\fB选项\fR：
+.PP
+\fB-u\fR, \fB--username\fR \fI用户名列表\fR
+.RS 4
+用户名列表，逗号分隔
+.RE
+.PP
+\fB-U\fR, \fB--username-file\fR \fI文件路径\fR
+.RS 4
+用户名字典文件路径
+.RE
+.PP
+\fB-p\fR, \fB--password\fR \fI密码列表\fR
+.RS 4
+密码列表，逗号分隔
+.RE
+.PP
+\fB--password-file\fR \fI文件路径\fR
+.RS 4
+密码字典文件路径
+.RE
+.PP
+\fB-L\fR, \fB--targets-file\fR \fI文件路径\fR
+.RS 4
+多个目标文件路径，每行一个目标
+.RE
+.PP
+\fB-k\fR, \fB--concurrent-targets\fR \fI数量\fR
+.RS 4
+同时破解的目标数，默认3个
+.RE
+.PP
+\fB-t\fR, \fB--threads\fR \fI线程数\fR
+.RS 4
+每个目标的并发线程数，默认20个
+.RE
+.PP
+\fB--timeout\fR \fI秒数\fR
+.RS 4
+连接超时时间，默认5秒
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan ftp 192.168.1.1 -u admin,root -p password123,admin123
+.RE
+.RS 4
+使用指定的用户名和密码组合破解
+.RE
+.PP
+.RS 4
+.B GYscan ftp 192.168.1.1 --username-file users.txt --password-file passwords.txt
+.RE
+.RS 4
+使用字典文件破解
+.RE
+.PP
+.RS 4
+.B GYscan ftp 192.168.1.1:2121 -u admin -p pass.txt -t 20
+.RE
+.RS 4
+指定端口，使用20线程破解
+.RE
+.PP
+.RS 4
+.B GYscan ftp ftp://192.168.1.1 -u admin -p password123
+.RE
+.RS 4
+使用FTP URL格式指定目标
+.RE
+.SS fu（文件上传漏洞检查工具）
+.PP
+\fBGYscan fu\fR \fB-u\fR \fIURL\fR [\fI选项\fR]
+.PP
+文件上传漏洞检查工具，支持多种绕过技术的检测，包括前端校验绕过、后缀名绕过、MIME类型绕过、双后缀绕过、空字节注入、条件竞争等。
+.PP
+\fB检测类型\fR：
+.PP
+前端校验绕过：模拟禁用JavaScript环境，测试直接上传恶意文件类型
+.PP
+后缀名绕过：测试空格、点号、下划线、分号、冒号、Unicode等绕过方式
+.PP
+MIME类型绕过：伪造图片、文档、办公文档等MIME类型
+.PP
+双后缀绕过：测试各种双后缀组合
+.PP
+空字节注入：测试URL编码的空字节绕过
+.PP
+条件竞争：并发上传测试，检测条件竞争漏洞
+.PP
+\fB选项\fR：
+.PP
+\fB-u\fR, \fB--url\fR \fIURL\fR
+.RS 4
+目标上传接口URL（必需参数）
+.RE
+.PP
+\fB--type\fR \fI文件类型\fR
+.RS 4
+测试的文件类型：php、jsp、asp等
+.RE
+.PP
+\fB-t\fR, \fB--threads\fR \fI线程数\fR
+.RS 4
+并发线程数，默认10
+.RE
+.PP
+\fB--timeout\fR \fI秒数\fR
+.RS 4
+请求超时时间，默认10秒
+.RE
+.PP
+\fB--proxy\fR \fI代理地址\fR
+.RS 4
+代理服务器地址
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan fu -u http://example.com/upload.php
+.RE
+.RS 4
+对上传接口进行全面的文件上传漏洞检测
+.RE
+.PP
+.RS 4
+.B GYscan fu -u http://example.com/upload.php --type php
+.RE
+.RS 4
+针对PHP文件类型进行检测
+.RE
+.SS linenum（Linux本地信息枚举工具）
+.PP
+\fBGYscan linenum\fR [\fI选项\fR]
+.PP
+Linux本地信息枚举工具，支持本地文件系统扫描、目录遍历、文件内容读取、系统信息获取等。
+.PP
+\fB功能说明\fR：
+.PP
+本地文件系统扫描：枚举目录结构、文件权限、敏感文件
+.PP
+本地目录遍历：递归遍历目录树，发现敏感配置和凭据
+.PP
+本地文件内容读取：读取shadow、passwd、配置等敏感文件
+.PP
+本地系统信息获取：获取内核版本、已安装软件、用户信息等
+.PP
+\fB选项\fR：
+.PP
+\fB-t\fR, \fB--target\fR \fI目标\fR
+.RS 4
+目标路径，默认当前目录
+.RE
+.PP
+\fB-o\fR, \fB--output\fR \fI文件路径\fR
+.RS 4
+输出报告文件路径
+.RE
+.PP
+\fB--depth\fR \fI深度\fR
+.RS 4
+目录遍历深度，默认3层
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan linenum
+.RE
+.RS 4
+枚举当前目录及其子目录
+.RE
+.PP
+.RS 4
+.B GYscan linenum -t /etc -o etc_report.txt
+.RE
+.RS 4
+枚举/etc目录并保存报告
+.RE
+.SS linux-kernel（Linux内核漏洞检测工具-仅支持Debain系统）
+.PP
+\fBGYscan linux-kernel\fR [\fI选项\fR]
+.PP
+Linux内核漏洞检测工具，支持本地内核版本获取、已知漏洞检测和提权建议。目前主要支持Debian及其衍生系统。
+.PP
+\fB检测内容\fR：
+.PP
+内核版本信息获取：精确识别内核版本号
+.PP
+漏洞检测：根据版本匹配已知CVE漏洞
+.PP
+提权建议：提供可能适用的提权漏洞信息
+.PP
+\fB选项\fR：
+.PP
+\fB-o\fR, \fB--output\fR \fI文件路径\fR
+.RS 4
+输出报告文件路径
+.RE
+.PP
+\fB-v\fR, \fB--verbose\fR
+.RS 4
+详细输出模式
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan linux-kernel
+.RE
+.RS 4
+检测当前系统的内核漏洞
+.RE
+.PP
+.RS 4
+.B GYscan linux-kernel -v -o kernel_report.txt
+.RE
+.RS 4
+详细输出并保存报告
+.RE
+.SS powershell（PowerShell远程执行工具）
+.PP
+\fBGYscan powershell\fR \fI子命令\fR [\fI选项\fR]
+.PP
+PowerShell远程执行工具，通过WinRM协议在远程Windows系统上执行PowerShell命令或脚本。支持HTTP和HTTPS协议。
+.PP
+\fB子命令\fR：
+.PP
+\fBexec\fR
+.RS 4
+执行单条PowerShell命令
+.RE
+.PP
+\fBscript\fR
+.RS 4
+执行PowerShell脚本
+.RE
+.PP
+\fBtest\fR
+.RS 4
+测试WinRM连接可用性
+.RE
+.PP
+\fB选项\fR：
+.PP
+\fB--target\fR \fI主机地址\fR
+.RS 4
+目标主机IP或域名（必需参数）
+.RE
+.PP
+\fB--port\fR \fI端口号\fR
+.RS 4
+WinRM端口，默认5985（HTTP）或5986（HTTPS）
+.RE
+.PP
+\fB--user\fR \fI用户名\fR
+.RS 4
+用户名（必需参数）
+.RE
+.PP
+\fB--password\fR \fI密码\fR
+.RS 4
+密码（必需参数）
+.RE
+.PP
+\fB--domain\fR \fI域名\fR
+.RS 4
+域名，用于域环境认证（可选）
+.RE
+.PP
+\fB--timeout\fR \fI秒数\fR
+.RS 4
+连接超时时间，默认10秒
+.RE
+.PP
+\fB--verbose\fR
+.RS 4
+详细输出模式
+.RE
+.PP
+\fB--https\fR
+.RS 4
+使用HTTPS加密连接
+.RE
+.PP
+\fBexec子命令选项\fR：
+.PP
+\fB-c\fR, \fB--command\fR \fI命令\fR
+.RS 4
+要执行的PowerShell命令（必需参数）
+.RE
+.PP
+\fBscript子命令选项\fR：
+.PP
+\fB-x\fR, \fB--script\fR \fI脚本内容\fR
+.RS 4
+PowerShell脚本内容（必需参数）
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan powershell exec --target 192.168.1.100 --user administrator --password "P@ssw0rd" --command "whoami"
+.RE
+.RS 4
+执行PowerShell命令获取当前用户
+.RE
+.PP
+.RS 4
+.B GYscan powershell script --target 192.168.1.100 --user administrator --password "P@ssw0rd" --script "Get-Process | Select-Object -First 5"
+.RE
+.RS 4
+执行PowerShell脚本列出前5个进程
+.RE
+.PP
+.RS 4
+.B GYscan powershell test --target 192.168.1.100 --port 5985
+.RE
+.RS 4
+测试WinRM端口是否开放
+.RE
+.PP
+.RS 4
+.B GYscan powershell exec --target 192.168.1.100 --user administrator --password "P@ssw0rd" --command "whoami" --https
+.RE
+.RS 4
+使用HTTPS连接执行命令
+.RE
+.SS process（进程与服务信息收集工具）
+.PP
+\fBGYscan process\fR [\fI选项\fR]
+.PP
+进程与服务信息收集工具，支持本地和远程Windows系统的进程列表、服务列表查看。
+.PP
+\fB功能说明\fR：
+.PP
+进程列表查看：列出所有运行进程，包括进程ID、名称、路径等
+.PP
+服务列表查看：列出所有Windows服务，包括服务名、显示名、状态等
+.PP
+服务详情获取：获取单个服务的详细信息
+.PP
+\fB选项\fR：
+.PP
+\fB-t\fR, \fB--target\fR \fI主机地址\fR
+.RS 4
+目标主机IP地址（远程查询时需要）
+.RE
+.PP
+\fB-u\fR, \fB--user\fR \fI用户名\fR
+.RS 4
+用户名（远程查询时需要）
+.RE
+.PP
+\fB-p\fR, \fB--password\fR \fI密码\fR
+.RS 4
+密码（远程查询时需要）
+.RE
+.PP
+\fB--port\fR \fI端口号\fR
+.RS 4
+WMI服务端口，默认135
+.RE
+.PP
+\fB--process\fR
+.RS 4
+列出进程列表
+.RE
+.PP
+\fB--service\fR
+.RS 4
+列出服务列表
+.RE
+.PP
+\fB--service-name\fR \fI服务名\fR
+.RS 4
+查看指定服务的详细信息
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan process
+.RE
+.RS 4
+列出本地系统的进程和服务
+.RE
+.PP
+.RS 4
+.B GYscan process --target 192.168.1.100 --user admin --password password --process
+.RE
+.RS 4
+远程列出目标系统的进程
+.RE
+.PP
+.RS 4
+.B GYscan process --target 192.168.1.100 --user admin --password password --service
+.RE
+.RS 4
+远程列出目标系统的服务
+.RE
+.SS rdp（RDP远程桌面工具）
+.PP
+\fBGYscan rdp\fR \fI子命令\fR [\fI选项\fR]
+.PP
+RDP远程桌面工具，用于检查RDP服务可用性、连接RDP服务、列出RDP会话和远程进程。
+.PP
+\fB子命令\fR：
+.PP
+\fBcheck\fR
+.RS 4
+检查RDP服务是否可用
+.RE
+.PP
+\fBconnect\fR
+.RS 4
+连接到RDP服务
+.RE
+.PP
+\fBsessions\fR
+.RS 4
+列出远程主机的RDP会话
+.RE
+.PP
+\fBprocesses\fR
+.RS 4
+列出远程主机的进程
+.RE
+.PP
+\fB选项\fR：
+.PP
+\fB--target\fR \fI主机地址\fR
+.RS 4
+目标主机IP或域名（必需参数）
+.RE
+.PP
+\fB--port\fR \fI端口号\fR
+.RS 4
+RDP端口，默认3389
+.RE
+.PP
+\fB--user\fR \fI用户名\fR
+.RS 4
+用户名
+.RE
+.PP
+\fB--password\fR \fI密码\fR
+.RS 4
+密码
+.RE
+.PP
+\fB--domain\fR \fI域名\fR
+.RS 4
+域名，用于域环境认证
+.RE
+.PP
+\fB--timeout\fR \fI秒数\fR
+.RS 4
+连接超时时间，默认10秒
+.RE
+.PP
+\fB--verbose\fR
+.RS 4
+详细输出模式
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan rdp check --target 192.168.1.100
+.RE
+.RS 4
+检查RDP服务是否可用
+.RE
+.PP
+.RS 4
+.B GYscan rdp connect --target 192.168.1.100 --user admin --password password
+.RE
+.RS 4
+连接到RDP服务
+.RE
+.PP
+.RS 4
+.B GYscan rdp sessions --target 192.168.1.100 --user admin --password password
+.RE
+.RS 4
+列出RDP会话
+.RE
+.PP
+.RS 4
+.B GYscan rdp processes --target 192.168.1.100 --user admin --password password
+.RE
+.RS 4
+列出远程进程
+.RE
+.SS route（路由跳数检测工具）
+.PP
+\fBGYscan route\fR [\fI选项\fR]
+.PP
+检测到达目标主机的路由跳数和网络路径信息。
+.PP
+\fB选项\fR：
+.PP
+\fB-t\fR, \fB--target\fR \fI目标地址\fR
+.RS 4
+目标IP地址或域名（必需参数）
+.RE
+.PP
+\fB--max-hops\fR \fI最大跳数\fR
+.RS 4
+最大追踪跳数，默认30
+.RE
+.PP
+\fB--timeout\fR \fI毫秒数\fR
+.RS 4
+等待响应超时时间，默认1000毫秒
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan route --target www.example.com
+.RE
+.RS 4
+追踪到目标主机的路由
+.RE
+.PP
+.RS 4
+.B GYscan route -t 8.8.8.8 --max-hops 20
+.RE
+.RS 4
+追踪到8.8.8.8的路由，最大20跳
+.RE
+.SS scan（网络扫描工具）
+.PP
+\fBGYscan scan\fR \fI目标\fR [\fI选项\fR]
+.PP
+网络扫描工具，支持主机发现、端口扫描、服务识别、服务指纹识别、IPv6扫描等功能。
+.PP
+\fB目标格式\fR：
+.PP
+单个IP：\fI192.168.1.100\fR
+.PP
+IPv6地址：\fI2001:db8::1\fR、\fI::1\fR（回环地址）
+.PP
+IP段：\fI192.168.1.0/24\fR
+.PP
+IP范围：\fI192.168.1.1-192.168.1.254\fR
+.PP
+域名：\fIwww.example.com\fR
+.PP
+\fB基本选项\fR：
+.PP
+\fI目标\fR
+.RS 4
+扫描目标，支持IPv4/IPv6地址、IP段、域名（必需参数，可直接传递或使用 -t/--target）
+.RE
+.PP
+\fB-t\fR, \fB--target\fR \fI目标\fR
+.RS 4
+扫描目标，支持IP、IP段、域名、IPv6地址
+.RE
+.PP
+\fB-p\fR, \fB--ports\fR \fI端口列表\fR
+.RS 4
+扫描端口，逗号分隔或范围，如：80,443,22或1-1000，-p-表示全端口扫描
+.RE
+.PP
+\fB-n\fR, \fB--threads\fR \fI线程数\fR
+.RS 4
+并发线程数，默认50
+.RE
+.PP
+\fB-w\fR, \fB--timeout\fR \fI秒数\fR
+.RS 4
+连接超时时间，默认3秒
+.RE
+.PP
+\fB-T\fR, \fB--timing\fR \fI级别\fR
+.RS 4
+扫描速度级别 (0-5):
+.RS 4
+0: 偏执 (Paranoid) - 非常慢的扫描，用于IDS规避
+.RE
+.RS 4
+1: 鬼祟 (Sneaky) - 慢速扫描，IDS规避
+.RE
+.RS 4
+2: 礼貌 (Polite) - 降低速度以减少对目标系统的影响
+.RE
+.RS 4
+3: 普通 (Normal) - 默认速度，平衡速度和隐蔽性
+.RE
+.RS 4
+4: 激进 (Aggressive) - 快速扫描，可能被检测到
+.RE
+.RS 4
+5: 疯狂 (Insane) - 极速扫描，容易被检测
+.RE
+.RE
+.PP
+\fB-o\fR, \fB--output\fR \fI文件路径\fR
+.RS 4
+结果输出文件路径
+.RE
+.PP
+\fB--output-format\fR \fI格式\fR
+.RS 4
+输出格式控制：
+.RS 4
+text：文本格式输出（默认）
+.RE
+.RS 4
+xml：XML格式输出，兼容nmap -oX参数
+.RE
+.RS 4
+json：JSON格式输出，兼容nmap -oJ参数
+.RE
+.RE
+.PP
+\fB--save-progress\fR \fI文件路径\fR
+.RS 4
+保存扫描进度到文件，支持中断后恢复扫描
+.RE
+.PP
+\fB--resume\fR \fI文件路径\fR
+.RS 4
+从保存的进度文件恢复扫描
+.RE
+.PP
+\fB扫描类型选项\fR：
+.PP
+\fB--sT\fR
+.RS 4
+TCP连接扫描 (nmap -sT)
+.RE
+.PP
+\fB--sU\fR
+.RS 4
+UDP扫描 (nmap -sU)
+.RE
+.PP
+\fB--sS\fR
+.RS 4
+TCP SYN扫描 (nmap -sS)
+.RE
+.PP
+\fB--sF\fR
+.RS 4
+TCP FIN扫描 (nmap -sF)
+.RS 4
+发送FIN数据包到目标端口
+.RE
+.RS 4
+根据RFC 793，关闭的端口会响应RST包，开放或过滤的端口不响应
+.RE
+.RS 4
+可用于检测open|filtered状态
+.RE
+.RE
+.PP
+\fB--sX\fR
+.RS 4
+TCP XMAS扫描 (nmap -sX)
+.RS 4
+发送FIN、URG、PSH标志位同时置位的数据包
+.RE
+.RS 4
+根据RFC 793，关闭的端口会响应RST包，开放或过滤的端口不响应
+.RE
+.RS 4
+可用于检测open|filtered状态
+.RE
+.RE
+.PP
+\fB--sN\fR
+.RS 4
+TCP NULL扫描 (nmap -sN)
+.RS 4
+发送不含任何标志位的数据包
+.RE
+.RS 4
+根据RFC 793，关闭的端口会响应RST包，开放或过滤的端口不响应
+.RE
+.RS 4
+可用于检测open|filtered状态
+.RE
+.RE
+.PP
+\fB--sA\fR
+.RS 4
+TCP ACK扫描 (nmap -sA)
+.RS 4
+发送ACK数据包到目标端口
+.RE
+.RS 4
+用于判断端口是否被过滤（返回RST表示可达，无法判断开放/关闭）
+.RE
+.RS 4
+可用于检测unfiltered状态
+.RE
+.RE
+.PP
+\fB--sW\fR
+.RS 4
+TCP窗口扫描 (nmap -sW)
+.RS 4
+通过检查TCP窗口大小判断端口状态
+.RE
+.RS 4
+某些系统开放端口会返回正的窗口值，关闭端口返回0
+.RE
+.RE
+.PP
+\fB--sM\fR
+.RS 4
+TCP Maimon扫描 (nmap -sM)
+.RS 4
+发送FIN/ACK标志位的数据包
+.RE
+.RS 4
+类似于FIN扫描，用于检测BSD系统
+.RE
+.RS 4
+可用于检测open|filtered状态
+.RE
+.RE
+.PP
+\fB端口状态说明\fR：
+.PP
+\fBopen（开放）\fR
+.RS 4
+目标端口正在运行服务并监听流量，是扫描中最受关注的状态，说明该端口可被外部访问并响应请求。
+.RE
+.PP
+\fBclosed（关闭）\fR
+.RS 4
+目标端口没有服务监听，但主机可达，会响应探测报文。关闭的端口不代表主机不存在，只是该端口当前无应用占用。
+.RE
+.PP
+\fBfiltered（过滤）\fR
+.RS 4
+探测报文被防火墙、路由器ACL或其他网络安全设备拦截，nmap无法确定端口的真实状态（开放/关闭）。通常表现为无响应或返回ICMP不可达错误。
+.RE
+.PP
+\fBunfiltered（未过滤）\fR
+.RS 4
+仅在使用ACK扫描时出现，nmap能与端口通信，但无法判断端口是开放还是关闭。这类端口未被过滤设备拦截，但缺乏足够信息确定状态。
+.RE
+.PP
+\fBopen|filtered（开放或过滤）\fR
+.RS 4
+nmap无法区分端口是开放还是被过滤。常见于UDP、IP协议、FIN/Xmas/Null等扫描类型，因为这些扫描的开放端口和过滤端口都可能不返回响应。
+.RE
+.PP
+\fBclosed|filtered（关闭或过滤）\fR
+.RS 4
+仅在使用IP ID空闲扫描时出现，nmap无法区分端口是关闭还是被过滤，两种状态下的探测结果特征一致。
+.RE
+.PP
+\fB--6\fR, \fB--ipv6\fR
+.RS 4
+启用IPv6扫描模式 (nmap -6参数)
+.RS 4
+支持标准IPv6地址：2001:db8::1、::1、fe80::1
+.RE
+.RS 4
+支持IPv6主机发现（ICMPv6 Echo请求）
+.RE
+.RS 4
+支持IPv6端口扫描和服务识别
+.RE
+.RE
+.PP
+\fB功能选项\fR：
+.PP
+\fB--O\fR
+.RS 4
+启用系统识别 (nmap -O参数)
+.RE
+.PP
+\fB--sV\fR
+.RS 4
+启用服务识别和版本检测 (nmap -sV参数)
+.RE
+.PP
+\fB--A\fR
+.RS 4
+全面扫描模式 (nmap -A参数)
+.RS 4
+等同于同时启用：系统识别、服务识别、TTL检测
+.RE
+.RS 4
+自动设置扫描速度为激进模式 (-T4)
+.RE
+.RE
+.PP
+\fB--f\fR, \fB--fragmented\fR
+.RS 4
+碎片化扫描模式 (nmap -f参数)
+.RS 4
+数据包分片发送以规避检测
+.RE
+.RE
+.PP
+\fB--ttl\fR
+.RS 4
+启用TTL检测，估算目标距离（网络跳数）
+.RE
+.PP
+\fB--sn\fR
+.RS 4
+主机存活探测模式 (nmap -sn参数)
+.RS 4
+仅进行主机发现，跳过端口扫描
+.RE
+.RS 4
+采用多协议组合探测（ICMP Ping + TCP SYN/ACK + UDP）
+.RE
+.RE
+.PP
+\fB--Pn\fR
+.RS 4
+跳过主机发现，直接扫描端口 (nmap -Pn参数)
+.RS 4
+适用于已确定主机存活的场景
+.RE
+.RE
+.PP
+\fB--traceroute\fR
+.RS 4
+启用路由追踪功能 (nmap --traceroute参数)
+.RS 4
+扫描完成后显示到达目标的路由路径
+.RE
+.RS 4
+支持Windows/Linux/macOS平台
+.RE
+.RE
+.PP
+\fB--max-trace-hops\fR \fI跳数\fR
+.RS 4
+路由追踪最大跳数，默认30
+.RE
+.PP
+\fB--trace-timeout\fR \fI秒数\fR
+.RS 4
+路由追踪超时时间，默认3秒
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan scan 192.168.1.100
+.RE
+.RS 4
+扫描单个IPv4地址
+.RE
+.PP
+.RS 4
+.B GYscan scan 192.168.1.0/24
+.RE
+.RS 4
+扫描整个网段
+.RE
+.PP
+.RS 4
+.B GYscan scan "::1" --ipv6 -p 22,80
+.RE
+.RS 4
+扫描IPv6本地回环地址
+.RE
+.PP
+.RS 4
+.B GYscan scan 2001:db8::1 --ipv6 -p 1-1000
+.RE
+.RS 4
+扫描IPv6地址
+.RE
+.PP
+\fB高级功能说明\fR：
+.PP
+\fB服务指纹识别\fR
+.RS 4
+GYscan内置了丰富的服务指纹库，支持识别超过100种常见网络服务，包括：
+.RS 4
+HTTP服务（Apache、Nginx、IIS、Lighttpd、Caddy、Tomcat等）
+.RE
+.RS 4
+数据库服务（MySQL、PostgreSQL、MongoDB、Redis、Oracle、MSSQL等）
+.RE
+.RS 4
+邮件服务（SMTP、IMAP、POP3）
+.RE
+.RS 4
+目录服务（LDAP、Active Directory）
+.RE
+.RS 4
+其他服务（SSH、FTP、DNS、NTP、SNMP、SMB、RDP、VNC等）
+.RE
+.RE
+.PP
+\fB服务探测技术\fR
+.RS 4
+协议握手探测：发送协议特定的握手包获取服务响应
+.RE
+.RS 4
+Banner抓取：获取服务默认页面或响应头信息
+.RE
+.RS 4
+正则匹配：使用预编译正则表达式进行版本提取
+.RE
+.RS 4
+多项式匹配：支持软匹配（Softmatch）提高识别覆盖率
+.RE
+.PP
+\fB操作系统识别\fR
+.RS 4
+基于TTL值分析
+.RE
+.RS 4
+基于TCP窗口大小特征
+.RE
+.RS 4
+基于服务端口组合
+.RE
+.RS 4
+基于Banner信息提取
+.RE
+.RS 4
+支持识别Windows、Linux、macOS、FreeBSD、OpenBSD、Cisco IOS、Juniper JunOS、Android等系统
+.RE
+.PP
+\fB连接池优化\fR
+.RS 4
+GYscan采用高效的TCP连接池管理，减少重复连接开销
+.RE
+.RS 4
+支持连接复用和预热机制
+.RE
+.RS 4
+内置结果缓存，加速批量扫描
+.RE
+.PP
+\fB扫描策略模板\fR
+.RS 4
+Paranoid (T0)：极慢速扫描，每包间隔5分钟，用于IDS规避
+.RE
+.RS 4
+Sneaky (T1)：慢速扫描，每包间隔15秒
+.RE
+.RS 4
+Polite (T2)：降低速度，减少对目标的影响
+.RE
+.RS 4
+Normal (T3)：默认速度，平衡性能和隐蔽性
+.RE
+.RS 4
+Aggressive (T4)：快速扫描，减少超时等待
+.RE
+.RS 4
+Insane (T5极速扫描，最大并发，最小超时
+.RE
+.PP
+\fB输出格式说明\fR
+.PP
+\fB文本格式（text）\fR
+.RS 4
+适合快速查看和初步分析
+.RE
+.RS 4
+显示主机、端口、服务、状态等基本信息
+.RE
+.PP
+\fBXML格式（xml）\fR
+.RS 4
+完全兼容nmap XML输出格式
+.RE
+.RS 4
+支持导入其他安全工具（如Metasploit、Nessus）
+.RE
+.RS 4
+包含完整的扫描元数据（时间戳、参数、统计信息）
+.RE
+.PP
+\fBJSON格式（json）\fR
+.RS 4
+便于程序化处理和API集成
+.RE
+.RS 4
+包含完整的结构化扫描结果
+.RE
+.RS 4
+适合大数据分析和自动化流程
+.RE
+.PP
+\fB进度保存与恢复\fR
+.RS 4
+支持扫描进度实时保存
+.RE
+.RS 4
+支持从保存进度恢复扫描
+.RE
+.RS 4
+适用于大规模网段扫描场景
+.RE
+.RS 4
+保留已完成的扫描结果，避免重复工作
+.RE
+.PP
+\fB路由追踪\fR
+.RS 4
+跨平台支持（Windows tracert、Linux tracepath、macOS traceroute）
+.RE
+.RS 4
+可配置最大跳数和超时时间
+.RE
+.RS 4
+与端口扫描集成，一次完成
+.RE
+.RS 4
+显示每跳的IP地址和主机名
+.RE
+.SS scapy（高级网络包操作工具）
+.PP
+\fBGYscan scapy\fR \fI子命令\fR [\fI选项\fR]
+.PP
+高级网络包操作工具，提供类似Python Scapy的底层网络包操作能力，支持原始包构造、网络接口检测等功能。
+.PP
+\fB子命令\fR：
+.PP
+\fBpacket\fR
+.RS 4
+构造和发送原始网络包
+.RE
+.PP
+\fBinterface\fR
+.RS 4
+检测网络接口
+.RE
+.PP
+\fBexample\fR
+.RS 4
+功能演示和示例
+.RE
+.PP
+\fBpacket子命令选项\fR：
+.PP
+\fB--target\fR \fI目标地址\fR
+.RS 4
+目标IP地址
+.RE
+.PP
+\fB--dport\fR \fI端口号\fR
+.RS 4
+目标端口
+.RE
+.PP
+\fB--sport\fR \fI端口号\fR
+.RS 4
+源端口
+.RE
+.PP
+\fB--syn\fR
+.RS 4
+发送TCP SYN包
+.RE
+.PP
+\fB--ack\fR
+.RS 4
+发送TCP ACK包
+.RE
+.PP
+\fB--fin\fR
+.RS 4
+发送TCP FIN包
+.RE
+.PP
+\fB--udp\fR
+.RS 4
+发送UDP包
+.RE
+.PP
+\fB--ttl\fR \fI数值\fR
+.RS 4
+设置TTL值
+.RE
+.PP
+\fB--payload\fR \fI字符串\fR
+.RS 4
+自定义数据包载荷
+.RE
+.PP
+\fBinterface子命令选项\fR：
+.PP
+\fB--verbose\fR
+.RS 4
+显示接口详细信息
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan scapy packet --target 192.168.1.100 --dport 80 --syn
+.RE
+.RS 4
+发送TCP SYN包到目标80端口
+.RE
+.PP
+.RS 4
+.B GYscan scapy packet --target 192.168.1.100 --dport 443 --ack --ttl 128
+.RE
+.RS 4
+发送TCP ACK包，设置TTL为128
+.RE
+.PP
+.RS 4
+.B GYscan scapy packet --target 192.168.1.100 --dport 53 --udp --payload "test payload"
+.RE
+.RS 4
+发送UDP包到DNS端口
+.RE
+.PP
+.RS 4
+.B GYscan scapy interface
+.RE
+.RS 4
+列出所有网络接口
+.RE
+.PP
+.RS 4
+.B GYscan scapy interface --verbose
+.RE
+.RS 4
+显示接口详细信息
+.RE
+.PP
+.RS 4
+.B GYscan scapy example
+.RE
+.RS 4
+查看功能演示
+.RE
+.SS smb（SMB协议操作工具）
+.PP
+\fBGYscan smb\fR \fI子命令\fR [\fI选项\fR]
+.PP
+SMB协议操作工具，用于SMB协议的安全测试和横向移动。支持共享列表查看、版本检测、远程命令执行、文件操作等。
+.PP
+\fB子命令\fR：
+.PP
+\fBshares\fR
+.RS 4
+列出SMB共享资源
+.RE
+.PP
+\fBversion\fR
+.RS 4
+检测SMB协议版本
+.RE
+.PP
+\fBexec\fR
+.RS 4
+执行远程命令
+.RE
+.PP
+\fBdir\fR
+.RS 4
+列出文件和目录
+.RE
+.PP
+\fB选项\fR：
+.PP
+\fB--target\fR \fI主机地址\fR
+.RS 4
+目标主机IP或域名（必需参数）
+.RE
+.PP
+\fB--port\fR \fI端口号\fR
+.RS 4
+SMB端口，默认445
+.RE
+.PP
+\fB--user\fR \fI用户名\fR
+.RS 4
+用户名
+.RE
+.PP
+\fB--password\fR \fI密码\fR
+.RS 4
+密码
+.RE
+.PP
+\fB--domain\fR \fI域名\fR
+.RS 4
+域名
+.RE
+.PP
+\fB--timeout\fR \fI秒数\fR
+.RS 4
+连接超时时间，默认10秒
+.RE
+.PP
+\fB--verbose\fR
+.RS 4
+详细输出模式
+.RE
+.PP
+\fB--very-verbose\fR
+.RS 4
+更详细的输出模式
+.RE
+.PP
+\fBexec子命令选项\fR：
+.PP
+\fB-c\fR, \fB--command\fR \fI命令\fR
+.RS 4
+要执行的命令（必需参数）
+.RE
+.PP
+\fBdir子命令选项\fR：
+.PP
+\fB-p\fR, \fB--path\fR \fI路径\fR
+.RS 4
+要列出的路径，默认为根目录
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan smb shares --target 192.168.1.100 --user admin --password password
+.RE
+.RS 4
+列出SMB共享
+.RE
+.PP
+.RS 4
+.B GYscan smb version --target 192.168.1.100
+.RE
+.RS 4
+检测SMB版本
+.RE
+.PP
+.RS 4
+.B GYscan smb dir --target 192.168.1.100 --user admin --password password --path "C:\\Windows"
+.RE
+.RS 4
+列出C:\\Windows目录下的文件
+.RE
+.PP
+.RS 4
+.B GYscan smb exec --target 192.168.1.100 --user admin --password password --command "whoami"
+.RE
+.RS 4
+执行远程命令
+.RE
+.PP
+.RS 4
+.B GYscan smb exec --target 192.168.1.100 --user domain\\admin --password password --command "systeminfo"
+.RE
+.RS 4
+使用域账号执行命令
+.RE
+.SS ssh（SSH密码爆破工具）
+.PP
+\fBGYscan ssh\fR \fB--target\fR \fI目标\fR [\fI选项\fR]
+.PP
+SSH密码爆破工具，Hydra风格实现，支持单目标和批量目标SSH密码爆破。
+.PP
+\fB选项\fR：
+.PP
+\fB--target\fR \fI主机地址\fR
+.RS 4
+目标主机IP或域名
+.RE
+.PP
+\fB--file\fR \fI文件路径\fR
+.RS 4
+包含目标列表的文件
+.RE
+.PP
+\fB--port\fR \fI端口号\fR
+.RS 4
+SSH端口，默认22
+.RE
+.PP
+\fB--user\fR \fI用户名\fR
+.RS 4
+单个用户名
+.RE
+.PP
+\fB--users\fR \fI文件路径\fR
+.RS 4
+用户名字典文件
+.RE
+.PP
+\fB--passwords\fR \fI文件路径\fR
+.RS 4
+密码字典文件（必需参数）
+.RE
+.PP
+\fB--threads\fR \fI线程数\fR
+.RS 4
+并发线程数，默认1
+.RE
+.PP
+\fB--timeout\fR \fI秒数\fR
+.RS 4
+连接超时时间，默认15秒
+.RE
+.PP
+\fB--delay\fR \fI毫秒数\fR
+.RS 4
+尝试间隔，默认2000毫秒
+.RE
+.PP
+\fB--output\fR \fI文件路径\fR
+.RS 4
+结果输出文件
+.RE
+.PP
+\fB--verbose\fR
+.RS 4
+详细输出模式
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan ssh --target 192.168.1.100 --user root --passwords password.txt
+.RE
+.RS 4
+单目标爆破
+.RE
+.PP
+.RS 4
+.B GYscan ssh --file targets.txt --user root --passwords password.txt
+.RE
+.RS 4
+批量目标爆破
+.RE
+.PP
+.RS 4
+.B GYscan ssh --target 192.168.1.100 --port 2222 --user root --passwords password.txt --threads 10
+.RE
+.RS 4
+指定端口和线程数
+.RE
+.PP
+.RS 4
+.B GYscan ssh --target 192.168.1.100 --user root --passwords password.txt --output ssh-results.txt
+.RE
+.RS 4
+输出结果到文件
+.RE
+.SS userinfo（本地用户和组分析工具）
+.PP
+\fBGYscan userinfo\fR [\fI选项\fR]
+.PP
+本地用户和组分析工具，支持列出系统用户、组信息、用户详细信息等。
+.PP
+\fB选项\fR：
+.PP
+\fB--users\fR
+.RS 4
+列出所有用户
+.RE
+.PP
+\fB--groups\fR
+.RS 4
+列出所有组
+.RE
+.PP
+\fB--user\fR \fI用户名\fR
+.RS 4
+查看指定用户的详细信息
+.RE
+.PP
+\fB--group\fR \fI组名\fR
+.RS 4
+查看指定组的详细信息
+.RE
+.PP
+\fB-o\fR, \fB--output\fR \fI文件路径\fR
+.RS 4
+输出报告文件路径
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan userinfo
+.RE
+.RS 4
+显示用户和组概要信息
+.RE
+.PP
+.RS 4
+.B GYscan userinfo --users
+.RE
+.RS 4
+列出所有系统用户
+.RE
+.PP
+.RS 4
+.B GYscan userinfo --user root
+.RE
+.RS 4
+查看root用户的详细信息
+.RE
+.SS webshell（WebShell生成工具）
+.PP
+\fBGYscan webshell\fR [\fI选项\fR]
+.PP
+WebShell生成工具，支持生成多种WebShell脚本，用于安全测试中的后门检测和清除。
+.PP
+\fB选项\fR：
+.PP
+\fB--type\fR \fI类型\fR
+.RS 4
+WebShell类型：php、asp、jsp、aspx
+.RE
+.PP
+\fB-o\fR, \fB--output\fR \fI文件路径\fR
+.RS 4
+输出文件路径
+.RE
+.PP
+\fB--password\fR \fI密码\fR
+.RS 4
+WebShell连接密码
+.RE
+.PP
+\fB--hidden\fR
+.RS 4
+生成隐藏WebShell
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan webshell --type php -o shell.php
+.RE
+.RS 4
+生成PHP WebShell
+.RE
+.PP
+.RS 4
+.B GYscan webshell --type asp -o shell.asp --password admin123
+.RE
+.RS 4
+生成带密码的ASP WebShell
+.RE
+.SS wmi（WMI远程管理工具）
+.PP
+\fBGYscan wmi\fR \fI子命令\fR [\fI选项\fR]
+.PP
+WMI（Windows Management Instrumentation）远程管理工具，支持远程命令执行、WMI查询、进程列表查看、服务列表查看、操作系统信息获取等。
+.PP
+\fB子命令\fR：
+.PP
+\fBexec\fR
+.RS 4
+通过WMI执行命令
+.RE
+.PP
+\fBquery\fR
+.RS 4
+执行WQL查询
+.RE
+.PP
+\fBprocesses\fR
+.RS 4
+列出远程进程
+.RE
+.PP
+\fBservices\fR
+.RS 4
+列出远程服务
+.RE
+.PP
+\fBosinfo\fR
+.RS 4
+获取操作系统信息
+.RE
+.PP
+\fB选项\fR：
+.PP
+\fB--target\fR \fI主机地址\fR
+.RS 4
+目标主机IP或域名（必需参数）
+.RE
+.PP
+\fB--port\fR \fI端口号\fR
+.RS 4
+WMI端口，默认135
+.RE
+.PP
+\fB--user\fR \fI用户名\fR
+.RS 4
+用户名
+.RE
+.PP
+\fB--password\fR \fI密码\fR
+.RS 4
+密码
+.RE
+.PP
+\fB--domain\fR \fI域名\fR
+.RS 4
+域名
+.RE
+.PP
+\fB--timeout\fR \fI秒数\fR
+.RS 4
+连接超时时间，默认10秒
+.RE
+.PP
+\fB--verbose\fR
+.RS 4
+详细输出模式
+.RE
+.PP
+\fBexec子命令选项\fR：
+.PP
+\fB-c\fR, \fB--command\fR \fI命令\fR
+.RS 4
+要执行的命令（必需参数）
+.RE
+.PP
+\fBquery子命令选项\fR：
+.PP
+\fB-q\fR, \fB--query\fR \fIWQL语句\fR
+.RS 4
+WQL查询语句（必需参数）
+.RE
+.PP
+\fB常用WQL查询示例\fR：
+.PP
+.RS 4
+SELECT * FROM Win32_Process
+.RE
+.RS 4
+查询所有进程
+.RE
+.PP
+.RS 4
+SELECT * FROM Win32_Service
+.RE
+.RS 4
+查询所有服务
+.RE
+.PP
+.RS 4
+SELECT * FROM Win32_OperatingSystem
+.RE
+.RS 4
+查询操作系统信息
+.RE
+.PP
+.RS 4
+SELECT * FROM Win32_NetworkAdapterConfiguration WHERE IPEnabled=TRUE
+.RE
+.RS 4
+查询网络适配器信息
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan wmi exec --target 192.168.1.100 --user admin --password password --command "whoami"
+.RE
+.RS 4
+执行远程命令
+.RE
+.PP
+.RS 4
+.B GYscan wmi query --target 192.168.1.100 --user admin --password password --query "SELECT * FROM Win32_Process"
+.RE
+.RS 4
+执行WMI查询
+.RE
+.PP
+.RS 4
+.B GYscan wmi processes --target 192.168.1.100 --user admin --password password
+.RE
+.RS 4
+列出远程进程
+.RE
+.PP
+.RS 4
+.B GYscan wmi services --target 192.168.1.100 --user admin --password password
+.RE
+.RS 4
+列出远程服务
+.RE
+.PP
+.RS 4
+.B GYscan wmi osinfo --target 192.168.1.100 --user admin --password password
+.RE
+.RS 4
+获取系统信息
+.RE
+.SS winlog（Windows日志查看工具）
+.PP
+\fBGYscan winlog\fR \fI子命令\fR [\fI选项\fR]
+.PP
+Windows日志查看工具，支持本地和远程Windows系统的日志查询，包括系统日志、安全日志、应用程序日志、安装日志、转发事件日志等。
+.PP
+\fB子命令\fR：
+.PP
+\fBsystem\fR
+.RS 4
+查看系统日志
+.RE
+.PP
+\fBsecurity\fR
+.RS 4
+查看安全日志
+.RE
+.PP
+\fBapplication\fR
+.RS 4
+查看应用程序日志
+.RE
+.PP
+\fBsetup\fR
+.RS 4
+查看安装日志
+.RE
+.PP
+\fBforwardedevents\fR
+.RS 4
+查看转发事件日志
+.RE
+.PP
+\fB选项\fR：
+.PP
+\fB-t\fR, \fB--target\fR \fI主机地址\fR
+.RS 4
+目标主机IP或主机名，不指定则查询本地
+.RE
+.PP
+\fB-P\fR, \fB--port\fR \fI端口号\fR
+.RS 4
+WMI服务端口，默认135
+.RE
+.PP
+\fB-u\fR, \fB--user\fR \fI用户名\fR
+.RS 4
+用户名，远程查询时需要
+.RE
+.PP
+\fB-p\fR, \fB--password\fR \fI密码\fR
+.RS 4
+密码，远程查询时需要
+.RE
+.PP
+\fB-d\fR, \fB--domain\fR \fI域名\fR
+.RS 4
+域名称，用于域环境认证
+.RE
+.PP
+\fB-e\fR, \fB--event-id\fR \fI事件ID\fR
+.RS 4
+按事件ID筛选，0表示不筛选
+.RE
+.PP
+\fB-H\fR, \fB--hours\fR \fI小时数\fR
+.RS 4
+时间范围，默认24小时
+.RE
+.PP
+\fB-l\fR, \fB--limit\fR \fI数量\fR
+.RS 4
+限制返回的日志数量，默认100条
+.RE
+.PP
+\fB-v\fR, \fB--verbose\fR
+.RS 4
+详细输出模式
+.RE
+.PP
+\fB-s\fR, \fB--page-size\fR \fI行数\fR
+.RS 4
+分页显示大小，0表示不分页
+.RE
+.PP
+\fB-c\fR, \fB--color\fR
+.RS 4
+启用彩色输出，默认启用
+.RE
+.PP
+\fB常见事件ID\fR：
+.PP
+\fB4624\fR - 成功登录
+.PP
+\fB4625\fR - 登录失败
+.PP
+\fB7036\fR - 服务停止/启动
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan winlog system
+.RE
+.RS 4
+查看本地系统日志
+.RE
+.PP
+.RS 4
+.B GYscan winlog system --target 192.168.1.100 --user admin --password password
+.RE
+.RS 4
+查看远程系统日志
+.RE
+.PP
+.RS 4
+.B GYscan winlog security --target 192.168.1.100 --user admin --password password --event-id 4624
+.RE
+.RS 4
+查看登录成功事件
+.RE
+.PP
+.RS 4
+.B GYscan winlog security --target 192.168.1.100 --user admin --password password --hours 168
+.RE
+.RS 4
+查看最近7天的安全日志
+.RE
+.PP
+.RS 4
+.B GYscan winlog application --target 192.168.1.100 --user admin --password password --limit 50
+.RE
+.RS 4
+限制返回50条记录
+.RE
+.PP
+.RS 4
+.B GYscan winlog security --target 192.168.1.100 --domain example.com --user admin --password password --event-id 4624 --hours 48 --limit 50
+.RE
+.RS 4
+组合条件查询
+.RE
+.SS ws（WebSocket测试工具）
+.PP
+\fBGYscan ws\fR \fB-u\fR \fIURL\fR [\fI选项\fR]
+.PP
+WebSocket测试工具，支持WebSocket连接测试、消息发送、响应断言、自动重连、心跳检测等功能。
+.PP
+\fB基本选项\fR：
+.PP
+\fB-u\fR, \fB--url\fR \fIURL\fR
+.RS 4
+WebSocket服务器地址 (ws://host:port/path 或 wss://host:port/path)
+.RE
+.PP
+\fB-m\fR, \fB--message\fR \fI内容\fR
+.RS 4
+发送的消息内容，默认：Hello GYscan
+.RE
+.PP
+\fB-t\fR, \fB--type\fR \fI类型\fR
+.RS 4
+消息类型：text（默认）或 binary
+.RE
+.PP
+\fB-H\fR, \fB--header\fR \fI请求头\fR
+.RS 4
+自定义HTTP头，格式：Key:Value，可多次使用
+.RE
+.PP
+\fB-c\fR, \fB--count\fR \fI次数\fR
+.RS 4
+发送消息次数，默认1次
+.RE
+.PP
+\fB-i\fR, \fB--interval\fR \fI间隔\fR
+.RS 4
+发送消息间隔，默认1秒
+.RE
+.PP
+\fB-o\fR, \fB--timeout\fR \fI时间\fR
+.RS 4
+超时时间，默认10秒
+.RE
+.PP
+\fB-v\fR, \fB--verbose\fR
+.RS 4
+详细输出模式
+.RE
+.PP
+\fB连接选项\fR：
+.PP
+\fB--skip-verify\fR
+.RS 4
+跳过TLS证书验证（用于WSS连接）
+.RE
+.PP
+\fB--origin\fR \fI字符串\fR
+.RS 4
+Origin请求头值
+.RE
+.PP
+\fB--subprotocols\fR \fI协议列表\fR
+.RS 4
+WebSocket子协议列表，逗号分隔
+.RE
+.PP
+\fB--send-delay\fR \fI时间\fR
+.RS 4
+发送消息后延迟
+.RE
+.PP
+\fB--network-timeout\fR \fI时间\fR
+.RS 4
+网络操作超时时间，默认10秒
+.RE
+.PP
+\fB自动重连选项\fR：
+.PP
+\fB-r\fR, \fB--reconnect\fR
+.RS 4
+启用自动重连机制
+.RE
+.PP
+\fB-k\fR, \fB--retries\fR \fI次数\fR
+.RS 4
+最大重试次数，默认5
+.RE
+.PP
+\fB-d\fR, \fB--max-delay\fR \fI时间\fR
+.RS 4
+最大重连延迟，默认30秒
+.RE
+.PP
+\fB响应断言选项\fR：
+.PP
+\fB-a\fR, \fB--assert\fR \fI断言规则\fR
+.RS 4
+响应断言，验证服务器响应是否符合预期
+.RS 4
+支持格式：
+.RE
+.RS 4
+contains:text - 响应包含指定文本
+.RE
+.RS 4
+regex:pattern - 响应匹配正则表达式
+.RE
+.RS 4
+json:field:value - JSON响应中指定字段的值
+.RE
+.RS 4
+length_greater:N - 响应长度大于N
+.RE
+.RE
+.PP
+\fB心跳检测选项\fR：
+.PP
+\fB--heartbeat\fR
+.RS 4
+启用心跳检测
+.RE
+.PP
+\fB--heartbeat-msg\fR \fI内容\fR
+.RS 4
+心跳消息内容，默认：ping
+.RE
+.PP
+\fB--heartbeat-interval\fR \fI时间\fR
+.RS 4
+心跳间隔，默认30秒
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan ws -u ws://192.168.1.100:8080/echo
+.RE
+.RS 4
+连接WebSocket服务器并发送默认消息
+.RE
+.PP
+.RS 4
+.B GYscan ws -u wss://echo.websocket.org -m "Hello" -v
+.RE
+.RS 4
+连接WSS服务器并启用详细输出
+.RE
+.PP
+.RS 4
+.B GYscan ws -u ws://192.168.1.100:8080 -m "test" -c 5 -i 2
+.RE
+.RS 4
+发送5次消息，间隔2秒
+.RE
+.PP
+.RS 4
+.B GYscan ws -u ws://192.168.1.100:8080 -H "Authorization:Bearer token123"
+.RE
+.RS 4
+携带自定义HTTP头连接
+.RE
+.PP
+.RS 4
+.B GYscan ws -u ws://192.168.1.100:8080 -a contains:Hello -a regex:^PONG
+.RE
+.RS 4
+使用响应断言验证服务器响应
+.RE
+.PP
+.RS 4
+.B GYscan ws -u ws://192.168.1.100:8080 --heartbeat --heartbeat-msg ping --heartbeat-interval 10s
+.RE
+.RS 4
+启用心跳检测，每10秒发送ping消息
+.RE
+.PP
+.RS 4
+.B GYscan ws -u ws://192.168.1.100:8080 -r -k 10 -d 60s
+.RE
+.RS 4
+启用自动重连，最多10次，最大延迟60秒
+.RE
+.PP
+.RS 4
+.B GYscan ws -u ws://192.168.1.100:8080 -t binary -m "base64:SGVsbG8="
+.RE
+.RS 4
+发送二进制消息（支持base64/hex编码）
+.RE
+.PP
+.SS sub（子域名挖掘工具）
+.PP
+\fBGYscan sub\fR \fI目标域名\fR [\fI选项\fR]
+.PP
+子域名挖掘工具，基于DNS查询的子域名枚举。支持字典爆破、DNS记录查询、高并发扫描、通配符检测和HTTP验证。
+.PP
+\fB选项\fR：
+.PP
+\fB-d\fR, \fB--domain\fR \fI域名\fR
+.RS 4
+目标域名（必需参数）
+.RE
+.PP
+\fB-w\fR, \fB--wordlist\fR \fI文件路径\fR
+.RS 4
+子域名字典文件路径
+.RE
+.PP
+\fB-t\fR, \fB--threads\fR \fI线程数\fR
+.RS 4
+并发线程数，默认50
+.RE
+.PP
+\fB-o\fR, \fB--timeout\fR \fI秒数\fR
+.RS 4
+超时时间，默认3秒
+.RE
+.PP
+\fB-T\fR, \fB--type\fR \fI查询类型\fR
+.RS 4
+DNS查询类型（A/CNAME），默认A
+.RE
+.PP
+\fB-H\fR, \fB--http\fR
+.RS 4
+验证HTTP响应，确认子域名是否可用（默认启用）
+.RE
+.PP
+\fB-f\fR, \fB--output\fR \fI文件路径\fR
+.RS 4
+结果输出文件路径
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan sub example.com
+.RE
+.RS 4
+默认扫描（启用HTTP验证）
+.RE
+.PP
+.RS 4
+.B GYscan sub example.com -w subdomains.txt
+.RE
+.RS 4
+使用自定义字典文件
+.RE
+.PP
+.RS 4
+.B GYscan sub example.com -t 100
+.RE
+.RS 4
+设置100个并发线程
+.RE
+.PP
+.RS 4
+.B GYscan sub example.com -T CNAME
+.RE
+.RS 4
+查询CNAME记录
+.RE
+.PP
+.RS 4
+.B GYscan sub example.com -f results.txt
+.RE
+.RS 4
+保存结果到文件
+.RE
+.PP
+.RS 4
+.B GYscan sub example.com --no-http
+.RE
+.RS 4
+禁用HTTP验证，只进行DNS查询
+.RE
+.PP
+.SS webfp（Web指纹识别工具）
+.PP
+\fBGYscan webfp\fR \fB-u\fR \fIURL\fR [\fI选项\fR]
+.PP
+网站技术指纹识别工具，基于HTTP响应头、HTML内容、资源文件路径进行指纹检测。支持105+技术指纹，涵盖前端框架、后端框架、CMS、UI框架、JavaScript库、CDN、分析工具等20+类别。
+.PP
+\fB支持识别的技术类别\fR：
+.PP
+\fB前端框架\fR：React、Vue.js、Angular、Svelte、Next.js、Nuxt.js、SvelteKit、Gatsby等
+.PP
+\fB后端框架\fR：Express、NestJS、Django、Flask、Laravel、Spring Boot、Gin等
+.PP
+\fBCMS系统\fR：WordPress、Drupal、Joomla、Shopify、Wix等
+.PP
+\fBUI框架\fR：Bootstrap、Tailwind CSS、Ant Design、Element Plus、Vuetify等
+.PP
+\fBJavaScript库\fR：jQuery、Lodash、Axios、Moment.js、Chart.js等
+.PP
+\fBCDN/托管\fR：Cloudflare、Akamai、Fastly、Vercel、Netlify等
+.PP
+\fB分析工具\fR：Google Analytics、Hotjar、Meta Pixel等
+.PP
+\fB选项\fR：
+.PP
+\fB-u\fR, \fB--url\fR \fIURL\fR
+.RS 4
+目标URL（必需参数）
+.RE
+.PP
+\fB-t\fR, \fB--timeout\fR \fI时长\fR
+.RS 4
+请求超时时间，默认10秒
+.RE
+.PP
+\fB-v\fR, \fB--verbose\fR
+.RS 4
+显示详细输出
+.RE
+.PP
+\fB-o\fR, \fB--output\fR \fI文件路径\fR
+.RS 4
+结果输出文件（JSON格式）
+.RE
+.PP
+\fB-U\fR, \fB--user-agent\fR \fI字符串\fR
+.RS 4
+自定义User-Agent
+.RE
+.PP
+\fB-n\fR, \fB--no-redirect\fR
+.RS 4
+禁止重定向
+.RE
+.PP
+\fB-c\fR, \fB--category\fR \fI类别名\fR
+.RS 4
+只显示指定类别的结果
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan webfp https://example.com
+.RE
+.RS 4
+基本扫描
+.RE
+.PP
+.RS 4
+.B GYscan webfp https://example.com -v
+.RE
+.RS 4
+显示详细输出，包括检测依据
+.RE
+.PP
+.RS 4
+.B GYscan webfp https://example.com -o result.json
+.RE
+.RS 4
+输出JSON格式结果到文件
+.RE
+.PP
+.RS 4
+.B GYscan webfp https://example.com -c "Frontend Frameworks"
+.RE
+.RS 4
+只显示前端框架类别
+.RE
+.PP
+.RS 4
+.B GYscan webfp https://example.com -t 30s
+.RE
+.RS 4
+设置30秒超时
+.RE
+.PP
+.SS xss（XSS漏洞检测工具）
+.PP
+\fBGYscan xss\fR \fB--target\fR \fIURL\fR [\fI选项\fR]
+.PP
+XSS漏洞检测工具，支持反射型、存储型、DOM型XSS漏洞检测。
+.PP
+\fB选项\fR：
+.PP
+\fB--target\fR \fIURL\fR
+.RS 4
+目标URL（必需参数）
+.RE
+.PP
+\fB--payload\fR \fI文件路径\fR
+.RS 4
+自定义Payload文件路径
+.RE
+.PP
+\fB--data\fR \fI数据\fR
+.RS 4
+POST请求数据
+.RE
+.PP
+\fB--param\fR \fI参数名\fR
+.RS 4
+测试的参数名
+.RE
+.PP
+\fB-t\fR, \fB--threads\fR \fI线程数\fR
+.RS 4
+并发线程数，默认5
+.RE
+.PP
+\fB--timeout\fR \fI秒数\fR
+.RS 4
+请求超时时间，默认10秒
+.RE
+.PP
+\fB--proxy\fR \fI代理地址\fR
+.RS 4
+代理服务器地址
+.RE
+.PP
+\fB--dom\fR
+.RS 4
+启用DOM XSS检测
+.RE
+.PP
+\fB--stored\fR
+.RS 4
+启用存储型XSS检测
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan xss --target http://example.com/search?q=test
+.RE
+.RS 4
+检测反射型XSS
+.RE
+.PP
+.RS 4
+.B GYscan xss --target http://example.com/comment --data "content=<script>alert(1)</script>" --stored
+.RE
+.RS 4
+检测存储型XSS
+.RE
+.PP
+.RS 4
+.B GYscan xss --target http://example.com/page --dom
+.RE
+.RS 4
+检测DOM XSS
+.RE
+.SS waf（WAF识别工具）
+.PP
+\fBGYscan waf\fR \fB-u\fR \fIURL\fR [\fI选项\fR]
+.PP
+WAF（Web Application Firewall）识别工具，用于识别目标网站使用的Web应用防火墙类型。支持多种主流WAF产品识别。
+.PP
+\fB支持检测的WAF类型\fR（部分）：
+.PP
+阿里云盾、腾讯云WAF、华为云WAF、360网站卫士、创宇盾、安全狗、云锁、ModSecurity、F5 ASM、Imperva、WAF (Nginx)、Naxsi、AWS WAF、Azure WAF、Google Cloud Armor等
+.PP
+\fB选项\fR：
+.PP
+\fB-u\fR, \fB--url\fR \fIURL\fR
+.RS 4
+目标URL（必需参数）
+.RE
+.PP
+\fB-f\fR, \fB--file\fR \fI文件路径\fR
+.RS 4
+包含多个目标的文件路径
+.RE
+.PP
+\fB--concurrency\fR \fI并发数\fR
+.RS 4
+并发检测数量，默认20，最大100
+.RE
+.PP
+\fB--rules\fR \fI文件路径\fR
+.RS 4
+自定义WAF规则文件路径
+.RE
+.PP
+\fB-o\fR, \fB--output\fR \fI文件路径\fR
+.RS 4
+结果输出文件路径
+.RE
+.PP
+\fB--format\fR \fI格式\fR
+.RS 4
+输出格式：txt（文本）或json（JSON格式）
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan waf -u https://www.example.com/
+.RE
+.RS 4
+检测单个URL的WAF
+.RE
+.PP
+.RS 4
+.B GYscan waf -u "https://www.example.com/" -u "https://test.com/"
+.RE
+.RS 4
+检测多个URL
+.RE
+.PP
+.RS 4
+.B GYscan waf -f targets.txt -o results.txt
+.RE
+.RS 4
+从文件读取目标并保存结果
+.RE
+.PP
+.RS 4
+.B GYscan waf -u https://www.example.com/ --format json -o results.json
+.RE
+.RS 4
+输出JSON格式结果
+.RE
+.SS whois（Whois查询工具）
+.PP
+\fBGYscan whois\fR \fI域名\fR [\fI选项\fR]
+.PP
+Whois信息查询工具，用于获取域名的注册信息、过期时间、Nameserver等。
+.PP
+\fB选项\fR：
+.PP
+\fB--server\fR \fI服务器\fR
+.RS 4
+指定Whois服务器
+.RE
+.PP
+\fB--port\fR \fI端口号\fR
+.RS 4
+Whois服务端口，默认43
+.RE
+.PP
+\fB--timeout\fR \fI秒数\fR
+.RS 4
+连接超时时间，默认10秒
+.RE
+.PP
+\fB-o\fR, \fB--output\fR \fI文件路径\fR
+.RS 4
+输出结果到文件
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan whois example.com
+.RE
+.RS 4
+查询域名的Whois信息
+.RE
+.PP
+.RS 4
+.B GYscan whois example.com -o whois.txt
+.RE
+.RS 4
+保存Whois信息到文件
+.RE
+.PP
+.RS 4
+.B GYscan whois example.com --server whois.markmonitor.com
+.RE
+.RS 4
+指定Whois服务器查询
+.RE
+.SS wwifi（Windows系统WiFi破解工具）
+.PP
+\fBGYscan wwifi\fR [\fI选项\fR]
+.PP
+Windows系统WiFi密码破解工具，用于获取和破解本地保存的WiFi密码。
+.PP
+\fB选项\fR：
+.PP
+\fB--list\fR
+.RS 4
+列出所有保存的WiFi网络
+.RE
+.PP
+\fB--ssid\fR \fI网络名\fR
+.RS 4
+指定要破解的WiFi网络名
+.RE
+.PP
+\fB--wordlist\fR \fI文件路径\fR
+.RS 4
+密码字典文件路径
+.RE
+.PP
+\fB--show-passwords\fR
+.RS 4
+显示所有保存的WiFi密码（需要管理员权限）
+.RE
+.PP
+\fB-o\fR, \fB--output\fR \fI文件路径\fR
+.RS 4
+输出结果到文件
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan wwifi --list
+.RE
+.RS 4
+列出所有保存的WiFi网络
+.RE
+.PP
+.RS 4
+.B GYscan wwifi --show-passwords
+.RE
+.RS 4
+显示所有WiFi密码
+.RE
+.PP
+.RS 4
+.B GYscan wwifi --ssid "MyWiFi" --wordlist passwords.txt
+.RE
+.RS 4
+破解指定WiFi网络
+.RE
+.SH 测试阶段命令
+.PP
+以下命令处于测试阶段，功能可能不稳定：
+.SS csrf（CSRF漏洞检测工具）
+.PP
+\fBGYscan csrf\fR \fB--target\fR \fIURL\fR [\fI选项\fR]
+.PP
+CSRF（Cross-Site Request Forgery）漏洞检测工具，支持POST请求的CSRF检测。
+.PP
+\fB选项\fR：
+.PP
+\fB--target\fR \fIURL\fR
+.RS 4
+目标URL（必需参数）
+.RE
+.PP
+\fB-X\fR, \fB--method\fR \fI方法\fR
+.RS 4
+HTTP方法，默认POST
+.RE
+.PP
+\fB-d\fR, \fB--data\fR \fI数据\fR
+.RS 4
+POST数据
+.RE
+.PP
+\fB--token\fR \fI令牌名\fR
+.RS 4
+CSRF令牌参数名
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan csrf --target http://example.com/vul/csrf.php -X POST -d "action=delete&id=1"
+.RE
+.SS ldap（LDAP枚举模块）
+.PP
+\fBGYscan ldap\fR \fB--server\fR \fI服务器\fR [\fI选项\fR]
+.PP
+LDAP（Lightweight Directory Access Protocol）枚举模块，用于枚举域环境中的用户、组、计算机等信息。
+.PP
+\fB选项\fR：
+.PP
+\fB--server\fR \fI服务器地址\fR
+.RS 4
+LDAP服务器地址（必需参数）
+.RE
+.PP
+\fB--user\fR \fI用户名\fR
+.RS 4
+绑定用户名
+.RE
+.PP
+\fB--password\fR \fI密码\fR
+.RS 4
+绑定密码
+.RE
+.PP
+\fB--base\fR \fI基准DN\fR
+.RS 4
+查询基准DN
+.RE
+.PP
+\fB--users\fR
+.RS 4
+枚举用户
+.RE
+.PP
+\fB--computers\fR
+.RS 4
+枚举计算机
+.RE
+.PP
+\fB--groups\fR
+.RS 4
+枚举组
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan ldap --server ldap://192.168.1.100 --user domain\\admin --password password --users
+.RE
+.RS 4
+枚举域用户
+.RE
+.SS mg（蜜罐识别工具）
+.PP
+\fBGYscan mg\fR \fB--target\fR \fI目标\fR [\fI选项\fR]
+.PP
+蜜罐（Honeypot）识别工具，用于检测目标是否为蜜罐系统。
+.PP
+\fB选项\fR：
+.PP
+\fB--target\fR \fI目标地址\fR
+.RS 4
+目标IP或域名（必需参数）
+.RE
+.PP
+\fB--port\fR \fI端口号\fR
+.RS 4
+检测端口，默认检测多个常见端口
+.RE
+.PP
+\fB--verbose\fR
+.RS 4
+详细输出模式
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan mg --target 192.168.1.100
+.RE
+.RS 4
+检测目标是否为蜜罐
+.RE
+.SS exp（Exploit-DB漏洞利用管理工具）
+.PP
+\fBGYscan exp\fR \fI子命令\fR [\fI选项\fR]
+.PP
+Exploit-DB漏洞利用管理工具，集成Exploit-DB数据库，包含46,928条漏洞利用和1,065条shellcode。支持漏洞搜索、PoC查看、代码复制、PoC生成、Nmap脚本生成等功能。
+.PP
+\fB子命令\fR：
+.PP
+\fBsearch\fR
+.RS 4
+搜索漏洞利用和Shellcode
+.RE
+.PP
+\fBlist\fR
+.RS 4
+列出可用的平台和漏洞类型
+.RE
+.PP
+\fBinfo\fR
+.RS 4
+显示漏洞利用详细信息
+.RE
+.PP
+\fBshow\fR
+.RS 4
+显示漏洞利用代码内容
+.RE
+.PP
+\fBcopy\fR
+.RS 4
+复制漏洞利用代码到指定目录
+.RE
+.PP
+\fBgenerate\fR
+.RS 4
+生成带GYscan头部的PoC代码
+.RE
+.PP
+\fBsimple\fR
+.RS 4
+生成简单的Python PoC模板
+.RE
+.PP
+\fBnmap\fR
+.RS 4
+生成Nmap NSE脚本
+.RE
+.PP
+\fBstats\fR
+.RS 4
+显示数据库统计信息
+.RE
+.PP
+\fBreload\fR
+.RS 4
+重新加载数据库
+.RE
+.PP
+\fBsearch选项\fR：
+.PP
+\fB-k\fR, \fB--keyword\fR \fI关键词\fR
+.RS 4
+搜索关键词
+.RE
+.PP
+\fB--cve\fR \fICVE编号\fR
+.RS 4
+按CVE编号搜索
+.RE
+.PP
+\fB--platform\fR \fI平台\fR
+.RS 4
+按平台筛选，如：windows/linux/php
+.RE
+.PP
+\fB--type\fR \fI类型\fR
+.RS 4
+按漏洞类型筛选，如：local/remote/dos/webapps
+.RE
+.PP
+\fB--exact\fR
+.RS 4
+精确匹配模式
+.RE
+.PP
+\fB-c\fR, \fB--case\fR
+.RS 4
+大小写敏感搜索
+.RE
+.PP
+\fB-o\fR, \fB--output\fR \fI文件路径\fR
+.RS 4
+输出结果到文件
+.RE
+.PP
+\fB--format\fR \fI格式\fR
+.RS 4
+输出格式：text/json
+.RE
+.PP
+\fB-v\fR, \fB--verbose\fR
+.RS 4
+详细输出模式
+.RE
+.PP
+\fBgenerate/simple选项\fR：
+.PP
+\fB-t\fR, \fB--target\fR \fI目标\fR
+.RS 4
+目标IP地址或主机名
+.RE
+.PP
+\fB-p\fR, \fB--port\fR \fI端口\fR
+.RS 4
+目标端口号
+.RE
+.PP
+\fB--ssl\fR
+.RS 4
+使用SSL/HTTPS
+.RE
+.PP
+\fB-o\fR, \fB--output\fR \fI目录路径\fR
+.RS 4
+输出目录路径
+.RE
+.PP
+\fBinfo/show/copy/nmap选项\fR：
+.PP
+\fB<EDB-ID>\fR
+.RS 4
+Exploit-DB ID（必需参数）
+.RE
+.PP
+\fB-v\fR, \fB--verbose\fR
+.RS 4
+详细输出模式（仅info命令）
+.RE
+.PP
+\fB使用示例\fR：
+.PP
+.RS 4
+.B GYscan exp search "apache struts"
+.RE
+.RS 4
+搜索Apache Struts相关漏洞
+.RE
+.PP
+.RS 4
+.B GYscan exp search --cve CVE-2021-44228
+.RE
+.RS 4
+按CVE编号搜索漏洞
+.RE
+.PP
+.RS 4
+.B GYscan exp search --platform windows --type local
+.RE
+.RS 4
+搜索Windows本地提权漏洞
+.RE
+.PP
+.RS 4
+.B GYscan exp info 40564
+.RE
+.RS 4
+查看EDB-ID 40564漏洞详情
+.RE
+.PP
+.RS 4
+.B GYscan exp show 40564 > poc.py
+.RE
+.RS 4
+查看并保存PoC代码
+.RE
+.PP
+.RS 4
+.B GYscan exp copy 40564 /tmp/exploits/
+.RE
+.RS 4
+复制PoC到指定目录
+.RE
+.PP
+.RS 4
+.B GYscan exp generate 40564 -t 192.168.1.100 -p 8080 -o /tmp/pocs/
+.RE
+.RS 4
+生成带目标参数的PoC
+.RE
+.PP
+.RS 4
+.B GYscan exp simple 40564 -t 192.168.1.100 -o poc.py
+.RE
+.RS 4
+生成简单Python PoC模板
+.RE
+.PP
+.RS 4
+.B GYscan exp nmap 40564 -o /usr/share/nmap/scripts/
+.RE
+.RS 4
+生成Nmap NSE检测脚本
+.RE
+.PP
+.RS 4
+.B GYscan exp stats
+.RE
+.RS 4
+显示数据库统计信息
+.RE
+.PP
+.RS 4
+.B GYscan exp list platforms
+.RE
+.RS 4
+列出所有可用平台
+.RE
+.PP
+.RS 4
+.B GYscan exp reload
+.RE
+.RS 4
+重新加载数据库
+.RE
+.SH 退出状态码
+.PP
+\fB0\fR
+.RS 4
+命令成功执行
+.RE
+.PP
+\fB1\fR
+.RS 4
+命令执行过程中发生错误
+.RE
+.PP
+\fB2\fR
+.RS 4
+参数错误或缺少必需参数
+.RE
+.SH 注意事项
+.PP
+\fB法律声明\fR：本工具仅用于授权的安全测试目的。任何未授权的使用行为均属违法，使用者需承担相应的法律责任。
+.PP
+\fB公网扫描注意事项\fR：使用scan命令扫描公网域名或公网IP时，建议将-T参数设置为3-4级速度（500ms到1s的连接速率），过快的连接速率可能导致连接超时或被目标封锁。
+.PP
+\fB权限要求\fR：部分功能需要管理员或root权限才能正常使用，如原始套接字操作、WMI远程查询等。
+.PP
+\fB防火墙设置\fR：远程连接Windows系统时，需要确保目标主机已启用相关服务（如WinRM、WMI），并允许防火墙流量通过。
+.SH 文件
+.PP
+\fB配置文件\fR：
+.PP
+\fBconfig/logging.json\fR
+.RS 4
+日志配置文件
+.RE
+.PP
+\fBconfig/ai_config.yml\fR
+.RS 4
+AI功能配置文件
+.RE
+.PP
+\fB字典文件\fR：
+.PP
+\fBdirmap/dicc.txt\fR
+.RS 4
+目录扫描小字典（约2756条记录）
+.RE
+.PP
+\fBdirmap/medium.txt\fR
+.RS 4
+目录扫描中字典（约9756条记录）
+.RE
+.PP
+\fButils/waf_rules.json\fR
+.RS 4
+WAF检测规则文件
+.RE
+.SH 版本信息
+GYscan v2.7
+.PP
+开发语言：Go 1.24+
+.PP
+支持平台：Windows 7+/Linux/macOS
+.PP
+许可证：Apache 2.0
+.PP
+\fB主要更新\fR：
+.PP
+新增配置审计（CA）模块，支持本地系统Windows、Linux、Web、SSH、中间件五大类配置安全检查
+.PP
+审计检查显示具体配置文件路径、配置项名称、当前值和修复建议
+.PP
+支持JSON、HTML、Text多种输出格式
+.PP
+审计报告包含详细的配置证据和风险评分
+.PP
+新增DCOM远程执行模块
+.SH 作者
+作者：BiliBili-弈秋啊
+.PP
+项目地址：https://github.com/xiguayiqiu/GYscan
+.PP
+Gitee镜像：https://gitee.com/bzhanyiqiua/GYscan
+.SH 参见
+.PP
+\fBnmap\fR(1)、\fBmasscan\fR(1)、\fBhydra\fR(1)、\fBmetasploit\fR(1)
+.SH 警告
+本工具包含敏感的安全测试功能，仅限授权的安全研究人员和渗透测试人员使用。使用者必须确保已获得目标系统的明确授权，否则使用本工具进行任何测试操作均属违法行为。
