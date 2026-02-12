@@ -49,6 +49,13 @@ gyscan-arm/
 
 ## 使用说明
 
+安装请安装ac密钥以保证termux可正常运行
+```bash
+pkg install -y ca-certificates
+```
+
+其他正常的arm架构可不用安装ac证书，除非你运行网络功能时显示tls认证失败x509
+
 ### 环境准备
 
 本项目的漏洞利用代码涉及多种编程语言和环境，建议准备以下运行环境：
