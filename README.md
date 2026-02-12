@@ -54,7 +54,7 @@ gyscan-arm/
 pkg install -y ca-certificates
 ```
 
-其他正常的arm架构可不用安装ac证书，除非你运行网络功能时显示tls认证失败x509
+其他正常的arm架构可不用安装ac证书，除非你运行网络功能时显示tls认证失败x509，如果你是其他正常的发行版请自行Ai解决，非常抱歉～
 
 ### 环境准备
 
